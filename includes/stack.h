@@ -4,29 +4,33 @@
 typedef struct stack *Stack;
 
 /* Fonctions globales */
-int is_empty(Stack s);
-void clear_stack(Stack s);
-void destroy_stack(Stack s);
-void show_stack(Stack s);
+int s_is_empty(Stack s);
+void s_clear_stack(Stack s);
+void s_destroy_stack(Stack s);
+void s_show_stack(Stack s);
 
 /* Fonctions pour les stacks de INT */
-Stack create_empty_stack_int();
-void push_int(Stack s, int val);
-int pop_int(Stack s);
+Stack s_create_empty_stack_int();
+void s_push_int(Stack s, int val);
+int s_pop_int(Stack s);
+int s_read_int(Stack s);
 
 /* Fonctions pour les stacks de CHAR */
-Stack create_empty_stack_char();
-void push_char(Stack s, char val);
-char pop_char(Stack s);
+Stack s_create_empty_stack_char();
+void s_push_char(Stack s, char val);
+char s_pop_char(Stack s);
+char s_read_char(Stack s);
 
 /* Fonction sur les flotants */
-Stack create_empty_stack_float();
-void push_float(Stack s, float val);
-float pop_float(Stack s);
+Stack s_create_empty_stack_float();
+void s_push_float(Stack s, float val);
+float s_pop_float(Stack s);
+float s_read_float(Stack s);
 
 /* Fonction sur les pointeurs générique */
-Stack create_empty_stack_generic(void (*free_func)(void*));
-void push_generic(Stack s, void *val);
-void *pop_generic(Stack s);
+Stack s_create_empty_stack_generic(void (*free_func)(void*));
+void s_push_generic(Stack s, void *val);
+void *s_pop_generic(Stack s);
+void *s_read_generic(Stack s);
 
 #endif

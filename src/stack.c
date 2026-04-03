@@ -48,38 +48,38 @@ struct stack {
 
 
 /* Fonctions globales */
-int is_empty(Stack s) {
+int s_is_empty(Stack s) {
     return s->size == 0;
 }
 
 static void clear_stack_int(Stack s) {
-    while (!is_empty(s)) {
-        pop_int(s);
+    while (!s_is_empty(s)) {
+        s_pop_int(s);
     }
 }
 
 static void clear_stack_char(Stack s) {
-    while (!is_empty(s)) {
-        pop_char(s);
+    while (!s_is_empty(s)) {
+        s_pop_char(s);
     }
 }
 
 static void clear_stack_float(Stack s) {
-    while (!is_empty(s)) {
-        pop_float(s);
+    while (!s_is_empty(s)) {
+        s_pop_float(s);
     }
 }
 
 static void clear_stack_generic(Stack s) {
     void * elem;
-    while (!is_empty(s)) {
-        elem = pop_generic(s);
+    while (!s_is_empty(s)) {
+        elem = s_pop_generic(s);
         s->free_func(elem);
     }
 }
 
 
-void clear_stack(Stack s) {
+void s_clear_stack(Stack s) {
     switch (s->type) {
     case STACK_INT:
         clear_stack_int(s);
@@ -99,14 +99,14 @@ void clear_stack(Stack s) {
     }
 }
 
-void destroy_stack(Stack s) {
-    clear_stack(s);
+void s_destroy_stack(Stack s) {
+    s_clear_stack(s);
     free(s);
     s = NULL;
 }
 
 
-void show_stack(Stack s) {
+void s_show_stack(Stack s) {
     node_stack node;
     switch (s->type) {
     case STACK_INT: {
@@ -142,7 +142,7 @@ void show_stack(Stack s) {
 
 
 /* Partie INT */
-Stack create_empty_stack_int() {
+Stack s_create_empty_stack_int() {
     Stack s = malloc(sizeof(struct stack));
     if (s == NULL) {
         fprintf(stderr, "Erreur de mémoire\n");
@@ -156,7 +156,7 @@ Stack create_empty_stack_int() {
     return s;
 }
 
-void push_int(Stack s, int val) {
+void s_push_int(Stack s, int val) {
     if (s->type != STACK_INT) {
         fprintf(stderr, "Type de stack invalide\n");
         return;
@@ -174,12 +174,12 @@ void push_int(Stack s, int val) {
     s->size++;
 }
 
-int pop_int(Stack s) {
+int s_pop_int(Stack s) {
     if (s->type != STACK_INT) {
         fprintf(stderr, "Type de stack invalide\n");
         return 0;
     }
-    if (is_empty(s)) {
+    if (s_is_empty(s)) {
         fprintf(stderr, "Erreur la stack est vide\n");
         return 0;
     }
@@ -194,9 +194,21 @@ int pop_int(Stack s) {
     return val;
 }
 
+int s_read_int(Stack s) {
+    if (s->type != STACK_INT) {
+        fprintf(stderr, "Type de stack invalide\n");
+        return 0;
+    }
+    if (s_is_empty(s)) {
+        fprintf(stderr, "Erreur la stack est vide\n");
+        return 0;
+    }
+
+    return s->node_stack.node_int_stack->val;
+}
 
 /* Fonctions pour les stacks de CHAR */
-Stack create_empty_stack_char() {
+Stack s_create_empty_stack_char() {
     Stack s = malloc(sizeof(struct stack));
     if (s == NULL) {
         fprintf(stderr, "Erreur de mémoire\n");
@@ -210,7 +222,7 @@ Stack create_empty_stack_char() {
     return s;
 }
 
-void push_char(Stack s, char val) {
+void s_push_char(Stack s, char val) {
     if (s->type != STACK_CHAR) {
         fprintf(stderr, "Type de stack invalide\n");
         return;
@@ -228,12 +240,12 @@ void push_char(Stack s, char val) {
     s->size++;
 }
 
-char pop_char(Stack s) {
+char s_pop_char(Stack s) {
     if (s->type != STACK_CHAR) {
         fprintf(stderr, "Type de stack invalide\n");
         return 0;
     }
-    if (is_empty(s)) {
+    if (s_is_empty(s)) {
         fprintf(stderr, "Erreur la stack est vide\n");
         return 0;
     }
@@ -248,7 +260,20 @@ char pop_char(Stack s) {
     return val;
 }
 
-Stack create_empty_stack_float() {
+char s_read_char(Stack s) {
+    if (s->type != STACK_CHAR) {
+        fprintf(stderr, "Type de stack invalide\n");
+        return 0;
+    }
+    if (s_is_empty(s)) {
+        fprintf(stderr, "Erreur la stack est vide\n");
+        return 0;
+    }
+
+    return s->node_stack.node_char_stack->val;
+}
+
+Stack s_create_empty_stack_float() {
     Stack s = malloc(sizeof(struct stack));
     if (s == NULL) {
         fprintf(stderr, "Erreur de mémoire");
@@ -260,7 +285,7 @@ Stack create_empty_stack_float() {
     return s;
 }
 
-void push_float(Stack s, float val) {
+void s_push_float(Stack s, float val) {
     if (s->type != STACK_FLOAT) {
         fprintf(stderr, "Type de stack invalide\n");
         return;
@@ -276,12 +301,12 @@ void push_float(Stack s, float val) {
     s->size++;
 }
 
-float pop_float(Stack s) {
+float s_pop_float(Stack s) {
     if (s->type != STACK_FLOAT) {
         fprintf(stderr, "Type de stack invalide\n");
         return 0;
     }
-    if (is_empty(s)) {
+    if (s_is_empty(s)) {
         fprintf(stderr, "Erreur la stack est vide\n");
         return 0;
     }
@@ -295,9 +320,22 @@ float pop_float(Stack s) {
     return val;
 }
 
+float s_read_float(Stack s) {
+    if (s->type != STACK_FLOAT) {
+        fprintf(stderr, "Type de stack invalide\n");
+        return 0;
+    }
+    if (s_is_empty(s)) {
+        fprintf(stderr, "Erreur la stack est vide\n");
+        return 0;
+    }
+
+    return s->node_stack.node_float_stack->val;
+}
+
 
 /* Stack sur des structures de donnée */
-Stack create_empty_stack_generic(void (*free_func)(void *)) {
+Stack s_create_empty_stack_generic(void (*free_func)(void *)) {
     if (free_func == NULL) {
         fprintf(stderr, "Erreur aucune fonction de free pour le pointeur");
         return NULL;
@@ -316,7 +354,7 @@ Stack create_empty_stack_generic(void (*free_func)(void *)) {
     return s;
 }
 
-void push_generic(Stack s, void* val) {
+void s_push_generic(Stack s, void* val) {
     if (s->type != STACK_GENERIC_STRUCT) {
         fprintf(stderr, "Type de stack invalide\n");
         return;
@@ -332,12 +370,12 @@ void push_generic(Stack s, void* val) {
     s->size++;
 }
 
-void* pop_generic(Stack s) {
+void* s_pop_generic(Stack s) {
     if (s->type != STACK_GENERIC_STRUCT) {
         fprintf(stderr, "Type de stack invalide\n");
         return NULL;
     }
-    if (is_empty(s)) {
+    if (s_is_empty(s)) {
         fprintf(stderr, "Erreur la stack est vide\n");
         return NULL;
     }
@@ -349,5 +387,18 @@ void* pop_generic(Stack s) {
     s->size--;
 
     return val;
+}
+
+void* s_read_generic(Stack s) {
+    if (s->type != STACK_GENERIC_STRUCT) {
+        fprintf(stderr, "Type de stack invalide\n");
+        return 0;
+    }
+    if (s_is_empty(s)) {
+        fprintf(stderr, "Erreur la stack est vide\n");
+        return 0;
+    }
+
+    return s->node_stack.node_generic_stack->val;
 }
 
